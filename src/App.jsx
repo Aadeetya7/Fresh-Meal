@@ -1,13 +1,17 @@
 import './App.css'
-import { Container } from '@mui/material'
+import CardsBody from './components/CardsBody'
+import Header from './components/Header'
+import { CssBaseline, Container } from '@mui/material'
 
 function App() {
 
   return (
     <>
-      <Container>
-        This is a Container
-      </Container>
+      <CssBaseline />
+      <Header />
+      <Container sx={{ marginTop: "80px" }}>
+        <CardsBody />
+      </Container >
     </>
   )
 }
