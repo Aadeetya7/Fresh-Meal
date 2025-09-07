@@ -1,14 +1,10 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material'
 
-let renderWithSubScript = (name) => {
-    return name.split("").map((char, index) =>
-        /\d/.test(char) ? <sub key={index}>{char}</sub> : char
-    )
-}
-
 const RestaurantCard = ({ resData }) => {
+    // console.log(resData);
+    if (!resData?.info) return null;
 
-    const { name, imageTitle, image, cuisine, avgRating, costForTwo, deliveryTime } = resData;
+    const { name, cloudinaryImageId, cuisines, avgRating, costForTwo, locality } = resData.info;
 
     return (
         <>
@@ -17,24 +13,34 @@ const RestaurantCard = ({ resData }) => {
                     <CardActionArea>
                         <CardMedia
                             sx={{ height: 140 }}
-                            image={image}
-                            title={imageTitle}
+                            image={cloudinaryImageId}
                         />
                         <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                                {renderWithSubScript(name)}
+                            <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="div"
+                                noWrap
+                                sx={{ maxWidth: 246 }}
+                            >
+                                {name}
                             </Typography>
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                {cuisine}
+                            <Typography
+                                variant="body2"
+                                sx={{ color: 'text.secondary', maxWidth: 246 }}
+                                gutterBottom
+                                noWrap
+                            >
+                                {(cuisines.join(","))}
                             </Typography>
                             <Typography variant="body2" sx={{ mt: 1 }}>
-                                {avgRating}
+                                {avgRating || "--"}
                             </Typography>
                             <Typography variant="body2" sx={{ mt: 1 }}>
                                 {costForTwo}
                             </Typography>
                             <Typography variant="body2" sx={{ mt: 1 }}>
-                                {deliveryTime}
+                                {locality}
                             </Typography>
                         </CardContent>
                     </CardActionArea>

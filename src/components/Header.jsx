@@ -8,9 +8,14 @@ const navItems = ['Home', 'About', 'Contact'];
 const Header = () => {
 
     const [mobileOpen, setMobileOpen] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     const handleDrawerToggle = () => {
         setMobileOpen((prev) => !prev);
+    }
+
+    const handleClick = () => {
+        setIsLoggedIn((prev) => !prev)
     }
 
     const drawer = (
@@ -53,11 +58,23 @@ const Header = () => {
                             MUI
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            {navItems.map((item) => (
-                                <Button key={item} sx={{ color: '#fff' }}>
-                                    {item}
-                                </Button>
-                            ))}
+
+                            <Button sx={{ color: '#fff' }}>
+                                Home
+                            </Button>
+
+                            <Button sx={{ color: '#fff' }}>
+                                About
+                            </Button>
+
+                            <Button sx={{ color: '#fff' }}>
+                                Contact
+                            </Button>
+
+                            <Button onClick={handleClick} sx={{ color: '#053542ff', backgroundColor: "#ca1350ff" }}>
+                                {isLoggedIn ? "Logout" : "Login"}
+                            </Button>
+
                         </Box>
                     </Toolbar>
                 </AppBar>

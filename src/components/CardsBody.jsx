@@ -1,9 +1,10 @@
 import '../styles/CardsBody.scss'
-import { styled, alpha, Grid, TextField, InputAdornment } from '@mui/material';
+import { styled, alpha, Grid, TextField, InputAdornment, Box, Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
 import RestaurantCard from './RestaurantCard';
-import { SiOxygen } from 'react-icons/si';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import ResturantCardShimmer from './ResturantCardShimmer';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -20,107 +21,99 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const resData = [
-    {
-        name: "O2",
-        cuisine: "Banquet Hall, Dinner, Breakfast",
-        avgRating: 4.3,
-        costForTwo: "₹800 for two",
-        deliveryTime: "30–40 min",
-        image: "src/assets/images/FoodImage-1.jpg",
-        imageTitle: "First-image"
-    },
-    {
-        name: "B12",
-        cuisine: "Italian, Pizza, Pasta",
-        avgRating: 4.1,
-        costForTwo: "₹600 for two",
-        deliveryTime: "25–35 min",
-        image: "src/assets/images/foodImage-2.jpg",
-        imageTitle: "Second-image"
-
-    },
-    {
-        name: "Spice Garden",
-        cuisine: "North Indian, Mughlai, Biryani",
-        avgRating: 4.5,
-        costForTwo: "₹1000 for two",
-        deliveryTime: "35–45 min",
-        image: "src/assets/images/foodImage-3.jpg",
-        imageTitle: "Third-image"
-
-    },
-    {
-        name: "Green Leaf",
-        cuisine: "Vegan, Salads, Healthy Food",
-        avgRating: 4.6,
-        costForTwo: "₹700 for two",
-        deliveryTime: "20–30 min",
-        image: "src/assets/images/foodImage-4.jpg",
-        imageTitle: "Fourth-image"
-
-    },
-    {
-        name: "Dragon Hut",
-        cuisine: "Chinese, Thai, Asian Fusion",
-        avgRating: 4.2,
-        costForTwo: "₹900 for two",
-        deliveryTime: "30–40 min",
-        image: "src/assets/images/foodImage-5.jpg",
-        imageTitle: "Fifth-image"
-
-    },
-    {
-        name: "Savvali",
-        cuisine: "Mutton Rassa",
-        avgRating: 5,
-        costForTwo: "₹1000 for two",
-        deliveryTime: "30–40 min",
-        image: "src/assets/images/footImage-6.jpg",
-        imageTitle: "Fifth-image"
-
-    }
-];
 
 const CardsBody = () => {
-    return (
-        <>
-            {/* Search Icon */}
-            <Search sx={{ mb: 2, }}>
-                <TextField
-                    variant="outlined"
-                    placeholder="Search…"
-                    size="small"
-                    sx={{
-                        borderRadius: "12px",           // rounded corners
-                        backgroundColor: "#fff",        // white background
-                        boxShadow: "0px 2px 5px rgba(0,0,0,0.1)", // subtle shadow
-                        "& .MuiOutlinedInput-root": {
-                            borderRadius: "12px",         // match input corners
-                        },
-                        "& .MuiOutlinedInput-input": {
-                            padding: "10px 12px",         // padding inside input
-                        },
-                    }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment    >
-                                <SearchIcon color="action" />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </Search>
-            {/* Resturant cards */}
-            <Grid container spacing={2}  >
-                {
-                    resData.map((resturant, index) => {
-                        return <RestaurantCard resData={resturant} key={index} />
-                    })
-                }
-            </Grid>
-        </>
-    )
+    const [resturantData, SetresturantData] = useState([])
+    const [filteredResturant, SetfilteredResturant] = useState([])
+    const [searchText, setsearchText] = useState("")
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    const fetchData = async () => {
+        const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING#")
+        const json = await data.json();
+        const restuCard = json?.data?.cards.find((card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+        const restu = restuCard.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
+        SetresturantData(restu);
+        SetfilteredResturant(restu);
+        console.log(restu);
+    }
+
+    const handleSearchInput = () => {
+        const filteredData = resturantData.filter((res) => res.info.name.toLowerCase().includes(searchText.toLowerCase()))
+        // res.info.name.includes(searchText)
+        SetfilteredResturant(filteredData)
+    }
+
+    return resturantData.length === 0 ?
+        (<ResturantCardShimmer />) : (
+            <>
+                {/* Search Icon */}
+                <Box sx={{ display: "flex", alignItems: "Center", justifyContent: "space-between", mb: 2 }}>
+                    <Search>
+                        <TextField
+                            variant="outlined"
+                            placeholder="Search…"
+                            size="small"
+                            value={searchText}
+                            onChange={(e) => {
+                                setsearchText(e.target.value)
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") handleSearchInput()
+                            }}
+                            sx={{
+                                borderRadius: "12px",           // rounded corners
+                                backgroundColor: "#fff",        // white background
+                                boxShadow: "0px 2px 5px rgba(0,0,0,0.1)", // subtle shadow
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "12px",         // match input corners
+                                },
+                                "& .MuiOutlinedInput-input": {
+                                    padding: "10px 12px",         // padding inside input
+                                },
+                            }}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start" >
+                                        <Box
+                                            sx={{ cursor: "pointer" }}
+                                            onClick={handleSearchInput}
+                                        >
+                                            <SearchIcon
+                                                color="action"
+                                                sx={{ display: "block" }}
+                                            />
+                                        </Box>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Search>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            const filteredData = resturantData.filter((item) => item?.info.avgRating >= 4.1);
+                            console.log("hello");
+                            SetresturantData(filteredData)
+                        }}
+                    >
+                        Top Rated Resturants
+                    </Button>
+                </Box>
+                {/* Resturant cards */}
+                <Grid container spacing={2}>
+                    {
+                        filteredResturant.map((resturant) => {
+                            return <RestaurantCard resData={resturant} key={resturant.info.id} />
+                        })
+                    }
+                </Grid>
+            </>
+        )
 }
 
 export default CardsBody
