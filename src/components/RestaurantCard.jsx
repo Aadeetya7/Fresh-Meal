@@ -1,16 +1,17 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material'
+import { Link } from 'react-router-dom';
 
 const RestaurantCard = ({ resData }) => {
     // console.log(resData);
     if (!resData?.info) return null;
 
-    const { name, cloudinaryImageId, cuisines, avgRating, costForTwo, locality } = resData.info;
+    const { name, cloudinaryImageId, cuisines, avgRating, costForTwo, locality, id } = resData.info;
 
     return (
         <>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} >
                 <Card sx={{ maxWidth: 345 }}>
-                    <CardActionArea>
+                    <CardActionArea component={Link} to={`/resturants/${id}`} >
                         <CardMedia
                             sx={{ height: 140 }}
                             image={cloudinaryImageId}

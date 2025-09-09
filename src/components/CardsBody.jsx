@@ -5,6 +5,7 @@ import RestaurantCard from './RestaurantCard';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import ResturantCardShimmer from './ResturantCardShimmer';
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -32,13 +33,13 @@ const CardsBody = () => {
     }, [])
 
     const fetchData = async () => {
-        const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING#")
+        const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.4640087729816&lng=77.02618695368315&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
         const json = await data.json();
         const restuCard = json?.data?.cards.find((card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-        const restu = restuCard.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
+        const restu = restuCard?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
         SetresturantData(restu);
         SetfilteredResturant(restu);
-        console.log(restu);
+        console.log(json.data.cards);
     }
 
     const handleSearchInput = () => {
@@ -107,9 +108,9 @@ const CardsBody = () => {
                 {/* Resturant cards */}
                 <Grid container spacing={2}>
                     {
-                        filteredResturant.map((resturant) => {
-                            return <RestaurantCard resData={resturant} key={resturant.info.id} />
-                        })
+                        filteredResturant.map((resturant) => (
+                            <RestaurantCard resData={resturant} key={resturant.info.id} />
+                        ))
                     }
                 </Grid>
             </>

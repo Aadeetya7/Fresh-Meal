@@ -1,6 +1,7 @@
 import { AppBar, Box, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 const navItems = ['Home', 'About', 'Contact'];
@@ -59,15 +60,15 @@ const Header = () => {
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
 
-                            <Button sx={{ color: '#fff' }}>
+                            <Button sx={{ color: '#fff' }} component={Link} to="/" >
                                 Home
                             </Button>
 
-                            <Button sx={{ color: '#fff' }}>
+                            <Button component={Link} to="/about" sx={{ color: '#fff' }}>
                                 About
                             </Button>
 
-                            <Button sx={{ color: '#fff' }}>
+                            <Button sx={{ color: '#fff' }} component={Link} to="/contact">
                                 Contact
                             </Button>
 
