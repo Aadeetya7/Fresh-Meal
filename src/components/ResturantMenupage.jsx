@@ -1,27 +1,14 @@
 import { Box, List, ListItem, Typography } from "@mui/material"
-import { useEffect, useState } from "react"
 import RestaurantCardShimmer from "./ResturantCardShimmer"
 import { useParams } from "react-router-dom"
-import { MENU_API } from "../utils/constants"
+import useResturantMenu from "../utils/useResturantMenu"
 
 const RestaurantMenuPage = () => {
 
-    const [resInfo, setResinfo] = useState(null)
     const { resid } = useParams()
     console.log(resid);
 
-
-    const fetchData = async () => {
-        const data = await fetch(MENU_API + resid + "&catalog_qa=undefined&submitAction=ENTER")
-        const json = await data.json()
-        const cardData = json?.data?.cards?.find((item) => item?.card?.card?.info);
-        console.log(cardData, "inside the fetch function ");
-        setResinfo(cardData)
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
+    const resInfo = useResturantMenu(resid)
 
     console.log(resInfo?.card?.card?.info?.name, "2nd");
 

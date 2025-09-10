@@ -2,6 +2,7 @@ import { AppBar, Box, Button, CssBaseline, Divider, Drawer, IconButton, List, Li
 import { useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus"
 
 const drawerWidth = 240;
 const navItems = ['Home', 'About', 'Contact'];
@@ -37,6 +38,8 @@ const Header = () => {
         </Box>
     );
 
+    const status = useOnlineStatus();
+
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -60,6 +63,9 @@ const Header = () => {
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
 
+                            <Button sx={{ color: '#fff' }}  >
+                                Online Status : {status ? "🟢" : "🔴"}
+                            </Button>
                             <Button sx={{ color: '#fff' }} component={Link} to="/" >
                                 Home
                             </Button>
@@ -70,6 +76,9 @@ const Header = () => {
 
                             <Button sx={{ color: '#fff' }} component={Link} to="/contact">
                                 Contact
+                            </Button>
+                            <Button sx={{ color: '#fff' }} component={Link} to="/grocery">
+                                Grocery
                             </Button>
 
                             <Button onClick={handleClick} sx={{ color: '#053542ff', backgroundColor: "#ca1350ff" }}>

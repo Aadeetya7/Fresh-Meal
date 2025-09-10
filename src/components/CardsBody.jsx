@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import ResturantCardShimmer from './ResturantCardShimmer';
 import { Link } from 'react-router-dom';
+import useOnlineStatus from '../utils/useOnlineStatus';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -47,6 +48,10 @@ const CardsBody = () => {
         // res.info.name.includes(searchText)
         SetfilteredResturant(filteredData)
     }
+
+    const status = useOnlineStatus();
+
+    if (status === false) return <h1>You are offline</h1>
 
     return resturantData.length === 0 ?
         (<ResturantCardShimmer />) : (
