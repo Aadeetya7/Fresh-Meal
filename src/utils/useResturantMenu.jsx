@@ -7,8 +7,11 @@ const useResturantMenu = (resid) => {
   const fetchData = async () => {
     const data = await fetch(MENU_API + resid + "&catalog_qa=undefined&submitAction=ENTER")
     const json = await data.json()
-    const cardData = json?.data?.cards?.find((item) => item?.card?.card?.info);
-    console.log(cardData, "inside the fetch function ");
+    // const cardData = json?.data?.cards?.find((item) => item?.card?.card?.info);
+    // console.log(json?.data?.cards, "inside the fetch function for resturant menu ");
+    // setResinfo(cardData)
+
+    const cardData = json?.data;
     setResinfo(cardData)
   }
 

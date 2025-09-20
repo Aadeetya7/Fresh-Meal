@@ -1,12 +1,13 @@
 import '../styles/CardsBody.scss'
-import { styled, alpha, Grid, TextField, InputAdornment, Box, Button } from '@mui/material';
+import { styled, alpha, Grid, TextField, InputAdornment, Box, Button, Input } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import RestaurantCard from './RestaurantCard';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import ResturantCardShimmer from './ResturantCardShimmer';
 import { Link } from 'react-router-dom';
 import useOnlineStatus from '../utils/useOnlineStatus';
+import UserContext from '../utils/userContext';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -34,22 +35,26 @@ const CardsBody = () => {
     }, [])
 
     const fetchData = async () => {
-        const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.4640087729816&lng=77.02618695368315&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
+        const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=18.5136751&lng=73.879858&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
         const json = await data.json();
-        const restuCard = json?.data?.cards.find((card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-        const restu = restuCard?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
+
+        const firstIndex = json?.data?.cards?.findIndex((card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+        const nextIndex = json?.data?.cards?.findIndex((card, idx) => idx > firstIndex && card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+        const restu = nextIndex !== -1 ? json?.data?.cards[nextIndex]?.card?.card?.gridElements?.infoWithStyle?.restaurants : null;
         SetresturantData(restu);
         SetfilteredResturant(restu);
-        console.log(json.data.cards);
+        console.log("resturants list", filteredResturant);
     }
 
     const handleSearchInput = () => {
         const filteredData = resturantData.filter((res) => res.info.name.toLowerCase().includes(searchText.toLowerCase()))
-        // res.info.name.includes(searchText)
         SetfilteredResturant(filteredData)
     }
 
     const status = useOnlineStatus();
+
+    const { loggedInUser, setname } = useContext(UserContext)
+
 
     if (status === false) return <h1>You are offline</h1>
 
@@ -109,6 +114,14 @@ const CardsBody = () => {
                     >
                         Top Rated Resturants
                     </Button>
+                    <Input
+                        variant="contained"
+                        color="primary"
+                        value={loggedInUser}
+                        onChange={(e) => setname(e.target.value)}
+                    >
+
+                    </Input>
                 </Box>
                 {/* Resturant cards */}
                 <Grid container spacing={2}>

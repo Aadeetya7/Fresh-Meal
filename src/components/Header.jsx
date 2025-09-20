@@ -1,8 +1,9 @@
 import { AppBar, Box, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus"
+import UserContext from "../utils/userContext"
 
 const drawerWidth = 240;
 const navItems = ['Home', 'About', 'Contact'];
@@ -11,6 +12,10 @@ const Header = () => {
 
     const [mobileOpen, setMobileOpen] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    const { loggedInUser } = useContext(UserContext);
+    console.log(loggedInUser);
+
 
     const handleDrawerToggle = () => {
         setMobileOpen((prev) => !prev);
@@ -83,6 +88,9 @@ const Header = () => {
 
                             <Button onClick={handleClick} sx={{ color: '#053542ff', backgroundColor: "#ca1350ff" }}>
                                 {isLoggedIn ? "Logout" : "Login"}
+                            </Button>
+                            <Button sx={{ color: '#fff' }}>
+                                {loggedInUser}
                             </Button>
 
                         </Box>
