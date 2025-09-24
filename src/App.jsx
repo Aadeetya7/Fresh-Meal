@@ -4,6 +4,8 @@ import Header from './components/Header'
 import { CssBaseline, Container } from '@mui/material'
 import { useEffect, useState } from 'react'
 import UserContext from './utils/userContext'
+import { Provider } from 'react-redux'
+import appStore from '../store/appStore'
 
 function App() {
   const [name, setname] = useState("")
@@ -17,13 +19,15 @@ function App() {
 
   return (
     <>
-      <CssBaseline />
-      <UserContext.Provider value={{ loggedInUser: name, setname }}>
-        <Header />
-        <Container sx={{ marginTop: "80px" }}>
-          <Outlet />
-        </Container >
-      </UserContext.Provider>
+      <Provider store={appStore}>
+        <CssBaseline />
+        <UserContext.Provider value={{ loggedInUser: name, setname }}>
+          <Header />
+          <Container sx={{ marginTop: "80px" }}>
+            <Outlet />
+          </Container >
+        </UserContext.Provider>
+      </Provider>
     </>
   )
 }

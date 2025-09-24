@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus"
 import UserContext from "../utils/userContext"
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 const navItems = ['Home', 'About', 'Contact'];
@@ -14,7 +15,7 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     const { loggedInUser } = useContext(UserContext);
-    console.log(loggedInUser);
+    // console.log(loggedInUser);
 
 
     const handleDrawerToggle = () => {
@@ -44,6 +45,10 @@ const Header = () => {
     );
 
     const status = useOnlineStatus();
+
+    const cartItems = useSelector((store) => store.cart.items)
+    console.log(cartItems);
+
 
     return (
         <>
@@ -81,6 +86,9 @@ const Header = () => {
 
                             <Button sx={{ color: '#fff' }} component={Link} to="/contact">
                                 Contact
+                            </Button>
+                            <Button sx={{ color: '#fff' }} component={Link} to="/cart">
+                                Cart ({cartItems.length} Items)
                             </Button>
                             <Button sx={{ color: '#fff' }} component={Link} to="/grocery">
                                 Grocery

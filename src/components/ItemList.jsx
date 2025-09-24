@@ -1,9 +1,20 @@
 import { AccordionDetails, Button, Divider, Typography } from "@mui/material"
 import { Box } from "@mui/material"
 import React from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../store/cartSlice";
 
 const ItemList = ({ items }) => {
-    console.log(items);
+    // console.log(items);
+
+    const dispatch = useDispatch();
+
+
+    const handleAddItem = (item) => {
+        dispatch(addItem(item));
+        //    Whatever we pass in from here goes like action.payload
+    }
+
     return (
         <AccordionDetails>
             {/* {items?.card?.info?.name} */}
@@ -30,7 +41,7 @@ const ItemList = ({ items }) => {
                             >
                                 {item.card.info.description}
                             </Typography>
-                            <Button>
+                            <Button onClick={() => handleAddItem(item)}>
                                 Add +
                             </Button>
                         </Box>
